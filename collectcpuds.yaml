@@ -23,10 +23,8 @@ spec:
         - -xc
         - |
           mkdir -p /collectcpu
-          echo "downloading collectcpu"
-          wget -O /collectcpu/collectcpu.sh https://raw.githubusercontent.com/elucier1/collectcpu/main/collectcpu.sh
+          wget -O /collectcpu/collectcpu.sh -o /dev/null https://raw.githubusercontent.com/elucier1/collectcpu/main/collectcpu.sh
           chmod +x /collectcpu/collectcpu.sh
-          echo "running collectcpu"
           while true; do
                 ./collectcpu/collectcpu.sh
                 sleep 60
