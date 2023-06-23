@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: collectcpu
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: collectcpu
+  template:
+    metadata:
+      labels:
+        app: collectcpu
+    spec:
+      hostPID: true
+      containers:
+      - name: collectcpu
+        command:
+        - nsenter
+        - --mount=/proc/1/ns/mnt
+        - --
+        - bash
+        - -xc
+        - |
+          mkdir -p /collectcpu
+          echo "downloading collectcpu"
+          wget -O /collectcpu/collectcpu.sh https://raw.githubusercontent.com/elucier1/collectcpu/main/collectcpu.sh
+          chmod +x /collectcpu/collectcpu.sh
+          echo "running collectcpu"
+          while true; do
+                ./collectcpu/collectcpu.sh
+                sleep 60
+          done
+        image: debian
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50M
+        securityContext:
+          privileged: true
